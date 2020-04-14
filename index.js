@@ -5,23 +5,8 @@
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
-/**
- * Respond with hello worker text
- * @param {Request} request
- */
-// async function handleRequest(request) {
-//   return new Response('Hello worker!', {
-//     headers: { 'content-type': 'text/plain' },
-//   })
-// }
 
-// async function handleRequest(request) {
-//   return Response.redirect(testURL[getRandomInt(2)], 302);
-// }
-
-
-
-
+//Rewriter for the title, h1#title, paragraph, as well sa the button link
 
 class ElementHandler {
 	constructor(variantNumber){
@@ -48,12 +33,12 @@ class ElementHandler {
 
 async function handleRequest(request) {
 	try{
-		console.log("What")
-		let cookies = request.headers.get('Cookie') || "None"
-		 if (cookies.includes("returning=true")) {
-		    console.log("Yes its here")
-		  }
-		console.log(cookies)
+		//Supposedly this would be where the cookie gets checked, but I had difficulty setting cookies while also using HTMLRewriter
+		// let cookies = request.headers.get('Cookie') || "None"
+		//  if (cookies.includes("returning=true")) {
+		//     console.log("Yes its here")
+		//   }
+		// console.log(cookies)
 
 
 		let response = await fetch(variantURL);
@@ -78,11 +63,9 @@ async function handleRequest(request) {
 		  headers: { 'content-type': 'text/html' },
 		})
 
+		testResponse.headers.append("Set-Cookie", "returning=true");
 
-		const randomStuff = `randomcookie=${Math.random()}; Expires=Wed, 21 Oct 2018 07:28:00 GMT; Path='/';`
-		testResponse.headers.set("Set-Cookie", "returning=true")
-
-		return rewriter.transform(returnURL)
+		return rewriter.transform(returnURL);
 
 	}
 	catch (err){
