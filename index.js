@@ -1,3 +1,7 @@
+//----ANTHONY TSUI-------
+//-----------------------
+//CLOUDFLARE SUMMER 2020 INTERNSHIP FULL-STACK ASSESSMENT
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
@@ -27,23 +31,17 @@ class ElementHandler {
 	  	if (element.tagName == 'title'){
 	  		element.setInnerContent('Anthony Tsui');
 	  	}
-	  	if (element.tagName == 'h1'){
+	  	else if (element.tagName == 'h1'){
 	  		element.setInnerContent('Anthony Tsui Variant ' + (this.variantNumber+1))
 	  	}
-	  	if(element.tagName == 'p'){
+	  	else if(element.tagName == 'p'){
 	  		element.setInnerContent('This is variant ' + (this.variantNumber==0 ? 'one' : 'two') + " of Anthony's take home project!")
-  	}
-  }
-
-  comments(comment) {
-    // An incoming comment
-  }
-
-  text(text) {
-    // An incoming piece of text
-  }
-
-  
+  		}
+  		else if(element.tagName == 'a'){
+  			element.setInnerContent('Go to my repo!')
+  			element.setAttribute('href', 'https://github.com/AnthonyTsui/Cloudflare-FS-App')
+  		}
+  }  
 }
 
 
@@ -60,15 +58,12 @@ async function handleRequest(request) {
 
 		let returnURL = await fetch(variantURLs[variantNumber]);//
 
-		console.log(variantNumber)
 
 		const rewriter = new HTMLRewriter()
 			.on('title', new ElementHandler(variantNumber))
 			.on('h1#title', new ElementHandler(variantNumber))
 			.on('p#description', new ElementHandler(variantNumber))
 			.on('a#url', new ElementHandler(variantNumber));
-
-
 
 		return rewriter.transform(returnURL);
 	}
@@ -82,7 +77,5 @@ function getRandomInt(max){
 }
 
 
-
-const testURL = ['https://www.google.com', 'https://github.com/AnthonyTsui']
 const variantURL = 'https://cfw-takehome.developers.workers.dev/api/variants'
 
