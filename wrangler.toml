@@ -1,6 +1,6 @@
 name = "atsui-cloudflare-fsapp"
 type = "javascript"
-account_id = ""
+account_id = "6152a68239e1d7948301a5949b7f6efb"
 workers_dev = true
 route = ""
 zone_id = ""

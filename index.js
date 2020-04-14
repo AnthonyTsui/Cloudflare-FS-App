@@ -48,13 +48,22 @@ class ElementHandler {
 
 async function handleRequest(request) {
 	try{
+		console.log("What")
+		let cookies = request.headers.get('Cookie') || "None"
+		 if (cookies.includes("returning=true")) {
+		    console.log("Yes its here")
+		  }
+		console.log(cookies)
+
+
 		let response = await fetch(variantURL);
 		let data = await response.json();
 		let variantURLs = data["variants"];
 
 		const res = await fetch(variantURLs[0]);
 
-		let variantNumber = getRandomInt(2)
+		let variantNumber = Math.random() < 0.5  ? 0 : 1
+		console.log(variantNumber)
 
 		let returnURL = await fetch(variantURLs[variantNumber]);//
 
@@ -65,15 +74,20 @@ async function handleRequest(request) {
 			.on('p#description', new ElementHandler(variantNumber))
 			.on('a#url', new ElementHandler(variantNumber));
 
-		return rewriter.transform(returnURL);
+		let testResponse =  new Response(returnURL, {
+		  headers: { 'content-type': 'text/html' },
+		})
+
+
+		const randomStuff = `randomcookie=${Math.random()}; Expires=Wed, 21 Oct 2018 07:28:00 GMT; Path='/';`
+		testResponse.headers.set("Set-Cookie", "returning=true")
+
+		return rewriter.transform(returnURL)
+
 	}
 	catch (err){
 		console.log('fetch failer', err)
 	}
-}
-
-function getRandomInt(max){
-	return Math.floor(Math.random() * Math.floor(max))
 }
 
 
